@@ -1,0 +1,15 @@
+.DS_Store
+
+.env
+.venv/
+
+.pytest_cache/
+__pycache__/
+
+data/
+
+*.html
+*.jsonl
+*.log
+
+.streamlit/
