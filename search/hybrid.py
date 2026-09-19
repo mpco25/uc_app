@@ -1,13 +1,12 @@
 """Hybrid keyword and semantic retrieval using rank fusion."""
 
 from search.keyword import keyword_search
-from search.semantic import (
-    DEFAULT_EMBEDDING_MODEL,
-    DEFAULT_OLLAMA_BASE_URL,
-    DEFAULT_REQUEST_TIMEOUT,
-    semantic_search,
+from search.semantic import semantic_search
+from config import (
+    OLLAMA_BASE_URL,
+    EMBEDDING_MODEL,
+    REQUEST_TIMEOUT,
 )
-
 
 RRF_CONSTANT = 60
 
@@ -24,9 +23,9 @@ def hybrid_search(
     top_n,
     semantic_candidate_multiplier=2,
     minimum_semantic_candidates=50,
-    ollama_base_url=DEFAULT_OLLAMA_BASE_URL,
-    embedding_model=DEFAULT_EMBEDDING_MODEL,
-    request_timeout=DEFAULT_REQUEST_TIMEOUT,
+    ollama_base_url=OLLAMA_BASE_URL,
+    embedding_model=EMBEDDING_MODEL,
+    request_timeout=REQUEST_TIMEOUT,
 ):
     """
     Combine keyword and semantic retrieval with Reciprocal Rank Fusion.

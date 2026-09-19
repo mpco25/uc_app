@@ -5,16 +5,18 @@ import httpx
 import numpy as np
 
 
-DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434"
-DEFAULT_EMBEDDING_MODEL = "nomic-embed-text:latest"
-DEFAULT_REQUEST_TIMEOUT = 600
+from config import (
+    OLLAMA_BASE_URL,
+    REQUEST_TIMEOUT,
+    EMBEDDING_MODEL,
+)
 
 
 def create_embedding(
     text,
-    ollama_base_url=DEFAULT_OLLAMA_BASE_URL,
-    embedding_model=DEFAULT_EMBEDDING_MODEL,
-    request_timeout=DEFAULT_REQUEST_TIMEOUT,
+    ollama_base_url=OLLAMA_BASE_URL,
+    embedding_model=EMBEDDING_MODEL,
+    request_timeout=REQUEST_TIMEOUT,
 ):
     """Create and L2-normalize one embedding through Ollama."""
     cleaned_text = text.strip()
@@ -53,9 +55,9 @@ def semantic_search(
     metadata,
     question,
     top_n,
-    ollama_base_url=DEFAULT_OLLAMA_BASE_URL,
-    embedding_model=DEFAULT_EMBEDDING_MODEL,
-    request_timeout=DEFAULT_REQUEST_TIMEOUT,
+    ollama_base_url=OLLAMA_BASE_URL,
+    embedding_model=EMBEDDING_MODEL,
+    request_timeout=REQUEST_TIMEOUT,
 ):
     """Retrieve the top-N semantically similar table records."""
     if index.ntotal != len(metadata):

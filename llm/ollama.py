@@ -2,7 +2,10 @@ import httpx
 
 from llm.context import build_context
 
-OLLAMA_BASE_URL = "http://localhost:11434"
+from config import (
+    OLLAMA_BASE_URL,
+    REQUEST_TIMEOUT,
+)
 
 def get_models(
     ollama_base_url=OLLAMA_BASE_URL,
@@ -32,8 +35,8 @@ def ask_model(
     model,
     question,
     results,
-    ollama_base_url,
-    request_timeout,
+    ollama_base_url=OLLAMA_BASE_URL,
+    request_timeout=REQUEST_TIMEOUT,
 ):
     context = build_context(
         results

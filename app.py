@@ -31,16 +31,15 @@ from ui import (
     render_table_overview,
 )
 
-
-INDEX_FILE = Path("data/uc_metadata.index")
-METADATA_FILE = Path("data/uc_metadata.json")
-
-OLLAMA_BASE_URL = "http://localhost:11434"
-EMBEDDING_MODEL = "nomic-embed-text:latest"
-PREFERRED_MODEL = "qwen3.8:latest"
-
-REQUEST_TIMEOUT = 600
-DEFAULT_CANDIDATES = 25
+from config import (
+    INDEX_FILE,
+    METADATA_FILE,
+    OLLAMA_BASE_URL,
+    EMBEDDING_MODEL,
+    REQUEST_TIMEOUT,
+    PREFERRED_MODEL,
+    DEFAULT_CANDIDATES,
+)
 
 @st.cache_resource
 def load_index():
