@@ -12,4 +12,5 @@ data/
 *.jsonl
 *.log
 
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
