@@ -15,6 +15,12 @@ import faiss
 import httpx
 import streamlit as st
 
+from llm import (
+    ask_model,
+    build_context,
+    get_models,
+)
+
 from search.exact import exact_search
 from search.hybrid import hybrid_search
 from search.semantic import semantic_search
@@ -61,98 +67,6 @@ def load_metadata():
 
 
 @st.cache_data(ttl=30)
-def get_models():
-    response = httpx.get(
-        f"{OLLAMA_BASE_URL}/api/tags",
-        timeout=30,
-    )
-    response.raise_for_status()
-
-    return sorted(
-        model["name"]
-        for model in response.json().get("models", [])
-        if "embed" not in model.get("name", "").lower()
-    )
-
-
-def build_context(results):
-    payload = []
-
-    for result in results:
-        row = result["metadata"]
-
-        payload.append(
-            {
-                "source": result.get("source"),
-                "similarity": (
-                    None
-                    if result.get("similarity") is None
-                    else round(result["similarity"], 4)
-                ),
-                "keyword_score": result.get("lexical_score", 0),
-                "matched_terms": result.get("matched_terms", []),
-                "catalog": row.get("catalog"),
-                "schema": row.get("schema"),
-                "table": row.get("table"),
-                "type": row.get("type"),
-                "table_comment": row.get("table_comment"),
-                "columns": row.get("columns", []),
-            }
-        )
-
-    return json.dumps(
-        payload,
-        ensure_ascii=False,
-        indent=2,
-    )
-
-
-def ask_model(model, question, results):
-    context = build_context(results)
-
-    response = httpx.post(
-        f"{OLLAMA_BASE_URL}/api/chat",
-        json={
-            "model": model,
-            "stream": False,
-            "keep_alive": "10m",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a Databricks Unity Catalog metadata "
-                        "assistant. Use only the supplied metadata. Do not "
-                        "invent catalogs, schemas, tables, columns, or "
-                        "relationships. Verify claims using names and "
-                        "descriptions. If evidence is insufficient, say so. "
-                        "Do not claim that retrieved results are exhaustive. "
-                        "Keep the answer concise."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": (
-                        f"Question:\n{question}\n\n"
-                        f"Metadata:\n{context}"
-                    ),
-                },
-            ],
-            "options": {
-                "temperature": 0,
-            },
-        },
-        timeout=REQUEST_TIMEOUT,
-    )
-
-    response.raise_for_status()
-
-    answer = response.json().get("message", {}).get("content")
-
-    if not answer:
-        raise RuntimeError("Ollama returned no answer.")
-
-    return answer.strip()
-
 
 def render_table_overview(results):
     st.subheader("Retrieved Tables")
