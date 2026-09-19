@@ -91,6 +91,7 @@ if index.ntotal != len(metadata):
     )
     st.stop()
 
+
 with st.sidebar:
     st.header("Settings")
 
@@ -149,6 +150,11 @@ with st.sidebar:
     )
 
     st.caption(f"Indexed tables: {index.ntotal}")
+
+    st.link_button(
+        "❓ Open Help",
+        "http://localhost:8501/Help",
+    )
 
 input_label = (
     "Exact search text"
