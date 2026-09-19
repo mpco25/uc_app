@@ -3,9 +3,6 @@
 import streamlit as st
 
 
-DEFAULT_SAMPLE_COLUMNS = 10
-
-
 def render_table_overview(results):
     """Render a compact table-level overview of retrieved metadata."""
     st.subheader("Retrieved Tables")
@@ -40,7 +37,6 @@ def render_table_overview(results):
 
 def render_table_details(
     results,
-    sample_columns=DEFAULT_SAMPLE_COLUMNS,
 ):
     """Render expandable evidence and column details for each result."""
     st.subheader("Retrieved Table Details")
@@ -87,10 +83,7 @@ def render_table_details(
             st.markdown(f"**Total columns:** {len(columns)}")
 
             if columns:
-                st.markdown(
-                    f"**First {min(sample_columns, len(columns))} "
-                    "columns:**"
-                )
+
                 st.dataframe(
                     [
                         {
@@ -100,7 +93,7 @@ def render_table_details(
                                 or "(No description)"
                             ),
                         }
-                        for column in columns[:sample_columns]
+                        for column in columns
                     ],
                     use_container_width=True,
                     hide_index=True,
