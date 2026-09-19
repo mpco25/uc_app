@@ -369,7 +369,23 @@ with st.sidebar:
         st.error(f"Could not retrieve models from Ollama: {error}")
         models = []
 
-    selected_model = st.selectbox("LLM Model", models) if models else None
+    if models:
+        preferred_model = "qwen3.8:latest"
+
+        default_index = (
+            models.index(preferred_model)
+            if preferred_model in models
+            else 0
+        )
+
+        selected_model = st.selectbox(
+            "LLM Model",
+            models,
+            index=default_index,
+        )
+    else:
+        selected_model = None
+        
     search_mode = st.radio(
         "Search Mode",
         ["Hybrid", "Exact", "Semantic"],
