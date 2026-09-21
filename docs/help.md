@@ -1,12 +1,45 @@
-# Unity Catalog Metadata Assistant
-
 ## LLM Model
 
-Select the Ollama model used to generate answers.
+The selected LLM is used to analyze the retrieved metadata and generate answers.
 
-Recommended:
+### Recommended
 
-- qwen3.8:latest
+✅ qwen3.8:latest
+
+Recommended for most users.
+
+- Good reasoning
+- Good metadata understanding
+- Good balance between quality and speed
+
+### Alternative Models
+
+**devstral-2:latest**
+- Strongest reasoning
+- Best for difficult or ambiguous questions
+- Slowest model
+
+**gemma4:26b**
+- Good general-purpose alternative
+- Usually concise answers
+
+**phi4:latest**
+- Fast responses
+- Good for quick exploration
+
+### Other Available Models
+
+Additional models are available and may be useful for experimentation, but are not generally recommended over qwen3.8 for metadata discovery.
+
+### Which model should I use?
+
+For most users:
+
+✅ qwen3.8:latest
+
+For the best possible reasoning:
+
+✅ devstral-2:latest
 
 ---
 
@@ -52,7 +85,7 @@ will match:
 - cell2
 - battery_cell
 
-Exact mode does not use FAISS or the LLM.
+Exact mode does not use AI.
 
 ---
 
@@ -70,16 +103,46 @@ Which datasets are related to genealogy?
 
 ## Tables Considered
 
-Controls how many candidate tables are sent to the model.
+When you ask a question, the assistant does not send the entire metadata catalog to the language model.
+
+Instead, the search engine first identifies the most relevant tables. These are called **candidate tables**.
+
+Example:
+
+Question:
+
+Where are purchase orders stored?
+
+The search engine might identify:
+
+- purchasing.purchase_orders
+- purchasing.purchase_order_items
+- sourcing.suppliers
+- logistics.shipments
+
+These candidate tables are then sent to the language model so it can generate an answer.
 
 Higher values:
 
-- may improve coverage
-- increase response time
+- may improve coverage by including more potentially relevant tables
+- reduce the chance of missing useful metadata
+- increase response time because more metadata must be processed
 
-Exact search ignores this setting.
+Lower values:
 
----
+- produce faster responses
+- may miss relevant tables that ranked lower in the search results
+
+### Search Mode Behavior
+
+**Hybrid**
+- Candidate tables are selected using keyword search and semantic search.
+
+**Semantic**
+- Candidate tables are selected using semantic similarity only.
+
+**Exact**
+- This setting is ignored because Exact mode searches the entire metadata catalog directly rather than selecting candidate tables first.
 
 ## Show Retrieved Context
 
