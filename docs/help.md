@@ -103,9 +103,11 @@ Which datasets are related to genealogy?
 
 ## Tables Considered
 
-When you ask a question, the assistant does not send the entire metadata catalog to the language model.
+For Hybrid and Semantic search, the system does not send the entire metadata catalog to the language model.
 
-Instead, the search engine first identifies the most relevant tables. These are called **candidate tables**.
+Instead, it first looks for tables that appear most relevant to the question based on table names, column names, descriptions, and other metadata.
+
+These are called candidate tables.
 
 Example:
 
@@ -133,16 +135,11 @@ Lower values:
 - produce faster responses
 - may miss relevant tables that ranked lower in the search results
 
-### Search Mode Behavior
+How candidate tables are selected:
 
-**Hybrid**
-- Candidate tables are selected using keyword search and semantic search.
-
-**Semantic**
-- Candidate tables are selected using semantic similarity only.
-
-**Exact**
-- This setting is ignored because Exact mode searches the entire metadata catalog directly rather than selecting candidate tables first.
+- Hybrid mode uses both keyword matching and semantic similarity.
+- Semantic mode uses semantic similarity only.
+- Exact mode does not use candidate tables and searches the entire metadata catalog directly.
 
 ## Show Retrieved Context
 
@@ -172,3 +169,39 @@ Shows:
 - matched metadata locations
 - all columns
 - column descriptions
+
+
+## Understanding Search Quality
+
+The quality of search results depends heavily on the quality of the underlying metadata.
+
+Current documentation coverage:
+
+| Object | Documented | Total | Coverage |
+|----------|----------:|----------:|----------:|
+| Catalogs | 3 | 110 | 2.7% |
+| Schemas | 5 | 375 | 1.3% |
+| Tables | 539 | 2713 | 19.9% |
+
+### Why this matters
+
+This assistant searches metadata rather than table contents.
+
+When table and column descriptions are well documented, the assistant can use business concepts such as:
+
+- Purchase Order
+- Supplier
+- Procurement
+- Inventory
+- Genealogy
+
+to find relevant datasets.
+
+When descriptions are missing, the assistant must rely mostly on:
+
+- Catalog names
+- Schema names
+- Table names
+- Column names
+
+As a result, some relevant tables may be harder to find and some search results may appear less intuitive.

@@ -7,7 +7,7 @@ The application uses:
 - **Streamlit** for the browser-based interface
 - **Ollama** for local embedding and language models
 - **nomic-embed-text** for semantic embeddings
-- **FAISS** for vector similarity search
+- **FAISS** (Facebook AI Similarity Search) for vector similarity search
 - **Keyword retrieval** for literal term matching
 - A selectable Ollama generation model, with **qwen3.8:latest** preferred by default when installed
 
@@ -225,11 +225,43 @@ This is useful for distinguishing:
 
 ## Tables Considered
 
-The **Tables considered** setting controls how many candidate tables are retained in Hybrid and Semantic modes before answer generation.
+For Hybrid and Semantic search, the application does not send the entire metadata catalog to the language model.
 
-- Higher values can improve coverage.
-- Higher values also send more metadata to the model and can make responses slower.
-- Exact mode searches all metadata, so this setting is disabled for Exact mode.
+Instead, it first looks for tables that appear most relevant to the search based on table names, column names, descriptions, and other metadata. These are called candidate tables.
+
+How candidate tables are identified:
+
+- Hybrid mode uses both keyword matching and semantic similarity.
+- Semantic mode uses semantic similarity only.
+- Exact mode does not use candidate tables and searches the entire metadata catalog directly.
+
+Example:
+
+Question:
+
+Where are purchase orders stored?
+
+The search engine might identify:
+
+- purchasing.purchase_orders
+- purchasing.purchase_order_items
+- sourcing.suppliers
+- logistics.shipments
+
+These candidate tables are then sent to the language model so it can generate an answer.
+
+Higher values:
+
+- may improve coverage by including more potentially relevant tables
+- reduce the chance of missing useful metadata
+- increase response time because more metadata must be processed
+
+Lower values:
+
+- produce faster responses
+- may miss relevant tables that ranked lower in the search results
+
+Exact search ignores this setting because it searches the complete metadata catalog directly.
 
 ## Prerequisites
 
