@@ -175,14 +175,6 @@ Shows:
 
 The quality of search results depends heavily on the quality of the underlying metadata.
 
-Current documentation coverage:
-
-| Object | Documented | Total | Coverage |
-|----------|----------:|----------:|----------:|
-| Catalogs | 3 | 110 | 2.7% |
-| Schemas | 5 | 375 | 1.3% |
-| Tables | 539 | 2713 | 19.9% |
-
 ### Why this matters
 
 This assistant searches metadata rather than table contents.

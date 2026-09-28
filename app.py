@@ -119,15 +119,23 @@ with st.sidebar:
         selected_model = None
         st.warning("No Ollama generation models were found.")
 
-    search_mode = st.radio(
-        "Search Mode",
-        ["Hybrid", "Exact", "Semantic"],
+    SEARCH_MODES = {
+        "Exact + Semantic": "Hybrid",
+        "Exact": "Exact",
+        "Semantic": "Semantic",
+    }
+
+    selected_label = st.radio(
+        "Search Method",
+        list(SEARCH_MODES.keys()),
         help=(
-            "Hybrid combines keyword matching with meaning-based search. "
-            "Exact searches the entered text literally across all metadata. "
-            "Semantic searches by meaning using embeddings."
+            "Recommended combines exact keyword matching and meaning-based search. "
+            "Exact Match searches the entered text literally across all metadata. "
+            "Meaning-Based searches for similar concepts and terminology."
         ),
     )
+
+    search_mode = SEARCH_MODES[selected_label]
 
     candidates = st.slider(
         "Tables considered",
